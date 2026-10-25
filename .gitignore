@@ -1,35 +1,169 @@
-# Gradle files
-.gradle/
-build/
-.kotlin/
 
-# Local configuration file (sdk path, etc)
-local.properties
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08111f">
+<title>GarageAI | Smart Garage Assistant</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#08111f;color:#f1f5f9;
+font-family:Arial,sans-serif;line-height:1.6}
+header{padding:24px 18px;background:#101d30;
+border-bottom:1px solid #26374e}
+.logo{font-size:25px;font-weight:800;color:#ff9b45}
+.logo span{color:#fff}
+header p{color:#a9b8cc;margin-bottom:0}
+main{max-width:700px;margin:auto;padding:22px 16px}
+.hero{padding:25px 18px;background:linear-gradient(135deg,#132c49,#102038);
+border:1px solid #2c4869;border-radius:18px}
+.tag{color:#ffad62;font-size:12px;font-weight:bold;letter-spacing:2px}
+h1{font-size:30px;line-height:1.2;margin:10px 0}
+p{color:#b7c5d7}
+.panel{margin-top:20px;padding:20px;background:#101d30;
+border:1px solid #273950;border-radius:16px}
+h2{font-size:20px;margin-top:0}
+label{display:block;margin:14px 0 6px;font-size:14px}
+input,select,textarea{width:100%;padding:13px;
+background:#091423;color:#fff;border:1px solid #35465c;
+border-radius:9px;font-size:16px}
+textarea{min-height:110px;resize:vertical}
+button{width:100%;margin-top:18px;padding:14px;border:0;
+border-radius:10px;background:#ff9b45;color:#111827;
+font-size:16px;font-weight:bold;cursor:pointer}
+button:focus,input:focus,textarea:focus,select:focus{
+outline:2px solid #ffbd80;outline-offset:2px}
+#result{display:none;white-space:pre-wrap}
+.notice{font-size:13px;color:#aabbd0}
+footer{text-align:center;padding:25px;color:#8798ad;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🔧 Garage<span>AI</span></div>
+  <p>Your smart assistant for vehicle troubleshooting.</p>
+</header>
+<main>
+  <section class="hero">
+    <div class="tag">BUILT FOR EVERY GARAGE</div>
+    <h1>Find the problem.<br>Plan the next check.</h1>
+    <p>Describe a vehicle problem and organise the information
+    a mechanic needs to investigate it.</p>
+  </section>
 
-# Log/OS Files
-*.log
+  <section class="panel">
+    <h2>Vehicle Troubleshooter</h2>
+    <form id="garageForm">
+      <label for="vehicle">Vehicle type</label>
+      <select id="vehicle">
+        <option>Motorcycle / Scooter</option>
+        <option>Car</option>
+        <option>Commercial vehicle</option>
+      </select>
 
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.aab
-*.apk
-output-metadata.json
+      <label for="make">Make and model</label>
+      <input id="make" placeholder="e.g. Tata Nexon or Honda Activa">
 
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
+      <label for="year">Model year (if known)</label>
+      <input id="year" inputmode="numeric" placeholder="e.g. 2023">
 
-# Keystore files
-*.jks
-*.keystore
+      <label for="language">Preferred language</label>
+      <select id="language">
+        <option>English</option>
+        <option>Hindi</option>
+        <option>Marathi</option>
+      </select>
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+      <label for="symptoms">Describe the symptoms</label>
+      <textarea id="symptoms" required
+      placeholder="e.g. Engine cranks but does not start..."></textarea>
 
-# Android Profiling
-*.hprof
+      <label for="codes">Diagnostic codes (optional)</label>
+      <input id="codes" placeholder="e.g. P0300, if available">
+
+      <button type="submit">Prepare Troubleshooting Notes</button>
+    </form>
+  </section>
+
+  <section class="panel" id="result" aria-live="polite">
+    <h2>Your case notes</h2>
+    <p id="report"></p>
+    <p class="notice">This is a basic demo, not an AI diagnosis.
+    It does not identify the actual fault. Verify every finding
+    with suitable service information and qualified testing.</p>
+    <button type="button" id="copyBtn">Copy case notes</button>
+  </section>
+
+  <section class="panel">
+    <h2>Our mission</h2>
+    <p>Make useful automotive knowledge more accessible to
+    small garages, independent mechanics and students.</p>
+    <p class="notice">Future features: AI assistance, verified
+    repair references, optional OBD2 data and service reports.</p>
+  </section>
+</main>
+<footer>GarageAI • Independent prototype • Version 0.1</footer>
+<script>
+const form = document.getElementById("garageForm");
+const result = document.getElementById("result");
+const report = document.getElementById("report");
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const vehicle = document.getElementById("vehicle").value;
+  const make = document.getElementById("make").value.trim();
+  const year = document.getElementById("year").value.trim();
+  const language = document.getElementById("language").value;
+  const symptoms = document.getElementById("symptoms").value.trim();
+  const codes = document.getElementById("codes").value.trim();
+
+  if (!symptoms) return;
+
+  const notes =
+`GARAGEAI — DEMONSTRATION CASE NOTES
+
+Vehicle: ${vehicle}
+Make/model: ${make || "Not provided"}
+Year: ${year || "Not provided"}
+Preferred language: ${language}
+
+Reported symptoms:
+${symptoms}
+
+Diagnostic codes:
+${codes || "Not provided"}
+
+NEXT STEP:
+Record when the fault occurs, warning lights, recent
+repairs and relevant test results. Consult vehicle-specific
+service information and perform suitable diagnostic tests.
+
+This report contains no verified diagnosis.
+`;
+
+  report.textContent = notes;
+  result.style.display = "block";
+  result.scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+document.getElementById("copyBtn").addEventListener("click",
+async function() {
+  const text = report.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    this.textContent = "Copied!";
+  } catch (error) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    const copied = document.execCommand("copy");
+    area.remove();
+    this.textContent = copied ? "Copied!" : "Select and copy the notes";
+  }
+});
+</script>
+</body>
+</html>
